@@ -1,12 +1,13 @@
 import { Request, Response } from "express";
 import { defineString } from "firebase-functions/params";
 import Stripe from "stripe";
-import reservationItem from "../../models/reservationItem";
+import ReservationItem from "../../models/ReservationItem";
 
 import { Router } from "express";
 import nodemailer = require("nodemailer");
 import mongoose from "mongoose";
 
+// eslint-disable-next-line
 const router = Router();
 
 router.get("/:date", async (req: Request, res: Response) => {
@@ -14,9 +15,10 @@ router.get("/:date", async (req: Request, res: Response) => {
 
   const { date } = req.params;
   try {
-    const reservationItems = await reservationItem
-      .find({ date: date }, { time: 1, _id: 0 })
-      .sort({ time: 1 });
+    const reservationItems = await ReservationItem.find(
+      { date: date },
+      { time: 1, _id: 0 }
+    ).sort({ time: 1 });
     if (!reservationItems) throw new Error("No reservationItems");
     const sorted = reservationItems.sort((a, b) => {
       return new Date(a.date).getTime() - new Date(b.date).getTime();
@@ -39,7 +41,7 @@ function email(source: any) {
     },
   });
 
-  const SENDMAIL = async (mailDetails: any, callback: any) => {
+  const sendmail = async (mailDetails: any, callback: any) => {
     try {
       const info = await transporter.sendMail(mailDetails);
       callback(info);
@@ -71,7 +73,7 @@ function email(source: any) {
   };
 
   // send mail with defined transport object and mail options
-  SENDMAIL(options, (info: any) => {
+  sendmail(options, (info: any) => {
     console.log("Email sent successfully");
     console.log("MESSAGE ID: ", info.messageId);
   });
@@ -89,7 +91,7 @@ router.post("/", async (req: Request, res: Response) => {
     const paymentIntent = await stripe.paymentIntents.retrieve(stripeId);
     metadata = paymentIntent.metadata;
     metadata.stripeId = stripeId;
-    newreservationItem = new reservationItem(metadata);
+    newreservationItem = new ReservationItem(metadata);
   } else {
     const { captchaRes } = req.body;
     const response = await (
@@ -103,9 +105,10 @@ router.post("/", async (req: Request, res: Response) => {
 
     const { time, date } = req.body.cleanData;
     if (response.success === true) {
-      const reservationItems = await reservationItem
-        .find({ date: date }, { time: 1, _id: 0 })
-        .sort({ time: 1 });
+      const reservationItems = await ReservationItem.find(
+        { date: date },
+        { time: 1, _id: 0 }
+      ).sort({ time: 1 });
       if (!reservationItems) throw new Error("No reservationItems");
       const sorted = reservationItems.sort((a, b) => {
         return new Date(a.date).getTime() - new Date(b.date).getTime();
@@ -118,7 +121,7 @@ router.post("/", async (req: Request, res: Response) => {
         req.body.cleanData.time = req.body.cleanData.time[0];
         console.log(req.body.cleanData.time);
       }
-      newreservationItem = new reservationItem(req.body.cleanData);
+      newreservationItem = new ReservationItem(req.body.cleanData);
     }
   }
 
@@ -126,8 +129,9 @@ router.post("/", async (req: Request, res: Response) => {
 
   const isReservationItem = await newreservationItem.save();
 
-  if (!isReservationItem)
+  if (!isReservationItem) {
     throw new Error("Something went wrong while saving form");
+  }
 
   res.status(200).json();
 

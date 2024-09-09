@@ -1,5 +1,9 @@
 {
   "scripts": {
-    "start": "firebase emulators:start"
+    "start": "firebase emulators:start",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.1.5"
   }
 }

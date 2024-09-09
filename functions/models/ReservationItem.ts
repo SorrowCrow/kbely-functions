@@ -51,6 +51,6 @@ const reservationItemSchema = new Schema({
   },
 });
 
-const reservationItem = model("Reservation", reservationItemSchema);
+const ReservationItem = model("Reservation", reservationItemSchema);
 
-export default reservationItem;
+export default ReservationItem;

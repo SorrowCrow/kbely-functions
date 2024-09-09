@@ -25,6 +25,9 @@ module.exports = {
   rules: {
     quotes: ["error", "double"],
     "import/no-unresolved": 0,
-    indent: ["error", 2],
+    "quote-props": 0,
+    "object-curly-spacing": 0,
+    "require-jsdoc": 0,
+    indent: 0,
   },
 };

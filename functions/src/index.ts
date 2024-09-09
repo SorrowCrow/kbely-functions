@@ -9,7 +9,7 @@
 
 import { onRequest } from "firebase-functions/v2/https";
 import * as logger from "firebase-functions/logger";
-import reservationItem from "../models/reservationItem";
+import reservationItem from "../models/ReservationItem";
 import Stripe from "stripe";
 import mongoose from "mongoose";
 import { Request, Response } from "express";
@@ -51,7 +51,7 @@ app.post("/stripe", async (req: Request, res: Response) => {
     if (ozdoba) amount += 350;
     if (prossecco) amount += 290;
     if (misa) amount += 350;
-    let reservedArray = [
+    const reservedArray = [
       time.slice("", time.indexOf(":")),
       time.slice(time.indexOf(":") + 1, time.indexOf("-")),
       time.slice(time.indexOf("-") + 1).slice("", time.indexOf(":")),
