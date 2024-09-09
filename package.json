@@ -1,9 +1,13 @@
 {
   "scripts": {
     "start": "firebase emulators:start",
+    "deploy": "firebase deploy --only functions",
     "prepare": "husky"
   },
   "devDependencies": {
     "husky": "^9.1.5"
+  },
+  "dependencies": {
+    "cors": "^2.8.5"
   }
 }

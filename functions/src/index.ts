@@ -14,6 +14,7 @@ import Stripe from "stripe";
 import mongoose from "mongoose";
 import { Request, Response } from "express";
 import express = require("express");
+import cors = require("cors");
 import { defineString } from "firebase-functions/params";
 import reservationItemRoutes from "../routes/api/reservationItems";
 
@@ -26,6 +27,13 @@ import reservationItemRoutes from "../routes/api/reservationItems";
 // });
 const app = express();
 app.use(express.json());
+
+const corsOptions = {
+  origin: "*",
+  optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
 
 app.post("/stripe", async (req: Request, res: Response) => {
   await mongoose.connect(defineString("MONGO_URI").value());
