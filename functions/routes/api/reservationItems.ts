@@ -52,7 +52,7 @@ function email(source: any) {
 
   const options = {
     from: "TESTING <forestmccallister@gmail.com>", // sender address
-    to: "andrejsmatvejevs000@gmail.com", // receiver email
+    to: source.email, // receiver email
     subject: "Thank you for your reservation",
     text: "We have received your reservation",
     html: `<strong>Your reservation: </strong>
